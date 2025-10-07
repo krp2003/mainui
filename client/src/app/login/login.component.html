@@ -1,18 +1,103 @@
-<div class="login-container">
-  <h2>Login</h2>
-  <form [formGroup]="itemForm" (ngSubmit)="login()">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input id="username" type="text" formControlName="username" placeholder="Enter username" />
+<section class="auth-shell">
+  <!-- Animated background (behind everything) -->
+  <div class="fx-bg" aria-hidden="true">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="mesh"></div>
+
+    <!-- subtle finance sparkline watermark -->
+    <svg class="sparkline" viewBox="0 0 1200 220" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="sl" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="var(--primary-color)" stop-opacity="0.9" />
+          <stop offset="1" stop-color="var(--primary-color)" stop-opacity="0.35" />
+        </linearGradient>
+      </defs>
+      <polyline
+        class="trace"
+        points="0,160 80,150 160,145 240,120 320,130 400,95 480,110 560,75 640,95 720,70 800,90 880,65 960,85 1040,60 1120,75 1200,65"
+        fill="none"
+        stroke="url(#sl)"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+    </svg>
+  </div>
+
+  <!-- CONTENT (unchanged card layout you liked) -->
+  <div class="auth-container">
+    <!-- LEFT: brand/context card -->
+    <aside class="panel brand-pane">
+      <div class="brand">
+        <i class="bi bi-shield-lock-fill"></i>
+        <span>Finovent</span>
+      </div>
+
+      <h1 class="headline">Welcome back</h1>
+      <p class="subcopy">
+        Sign in to orchestrate your financial seminars and workshops with role-based tools and live insights.
+      </p>
+
+      <ul class="bullets">
+        <li><i class="bi bi-check-circle-fill"></i> Secure, role-based access</li>
+        <li><i class="bi bi-lightning-charge-fill"></i> Fast enrollments & updates</li>
+        <li><i class="bi bi-graph-up-arrow"></i> Post-event analytics</li>
+      </ul>
+    </aside>
+
+    <!-- RIGHT: login card -->
+    <div class="panel form-pane">
+      <div class="login-card reveal">
+        <h2>Sign in</h2>
+
+        <form [formGroup]="itemForm" (ngSubmit)="login()" novalidate>
+          <!-- Username -->
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input">
+              <i class="bi bi-person"></i>
+              <input
+                id="username"
+                type="text"
+                formControlName="username"
+                placeholder="Enter username"
+                autocomplete="username"
+                required
+              />
+            </div>
+            <small class="field-error" *ngIf="itemForm.get('username')?.touched && itemForm.get('username')?.invalid">
+              Username is required
+            </small>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input">
+              <i class="bi bi-lock-fill"></i>
+              <input
+                id="password"
+                type="password"
+                formControlName="password"
+                placeholder="Enter password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+            <small class="field-error" *ngIf="itemForm.get('password')?.touched && itemForm.get('password')?.invalid">
+              Password is required
+            </small>
+          </div>
+
+          <button type="submit" class="primary-btn submit-btn" [disabled]="itemForm.invalid">Login</button>
+
+          <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+        </form>
+
+        <p class="register-link">
+          Don’t have an account? <a routerLink="/registration">Register here</a>
+        </p>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password" placeholder="Enter password" />
-    </div>
-    <button type="submit" class="primary-btn">Login</button>
-  </form>
-  <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-  <p class="register-link">
-    Don't have an account? <a routerLink="/registration">Register here</a>
-  </p>
-</div>
+  </div>
+</section>
