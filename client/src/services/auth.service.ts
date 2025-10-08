@@ -32,7 +32,7 @@ export class AuthService {
   SetUsername(username: any) {
     localStorage.setItem('username', username);
   }
-  getUsername(): string | null {
+  get getUsername(): string | null {
     return localStorage.getItem('username');
   }
   logout() {

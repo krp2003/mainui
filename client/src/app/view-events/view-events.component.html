@@ -1,36 +1,44 @@
+
 <div class="events-container">
   <h2>All Events</h2>
-  <!-- Display any error from loading events -->
+
   <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-  <!-- Events Table -->
-  <table class="events-table" *ngIf="events.length">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Date</th>
-        <th>Location</th>
-        <th *ngIf="!authService.hasAnyRole('professional')">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let event of events">
-        <td>{{ event.title }}</td>
-        <td>{{ event.schedule | date: 'mediumDate' }}</td>
-        <td>{{ event.location }}</td>
-        <td *ngIf="!authService.isRole('professional')">
-          <button (click)="checkStatus(event.id)" class="secondary-btn">
-            Check Status
-          </button>
-          <button (click)="viewDetails(event.id)" class="secondary-btn">
-            View Details
-          </button>
-          <button (click)="enroll(event.id)" class="primary-btn">Enroll</button>
-          <div class="status-text" *ngIf="statusResults[event.id]">
-            {{ statusResults[event.id] }}
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
+  <div class="event-cards" *ngIf="events.length">
+    <div class="event-card" *ngFor="let event of events">
+      <!-- Top-right action icons -->
+      <div class="top-right-icons" *ngIf="!authService.isRole('professional')">
+        <!-- Update button (Heroicon - Pencil) -->
+        <button class="icon-btn update-btn" (click)="updateEventStatus(event.id)" title="Update Status">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M11 4h2m-1-1v2m0 4h.01M6 18l-2 2 2-2zm0 0L18 6a2 2 0 112 2L8 20H6v-2z" />
+          </svg>
+        </button>
+
+        <!-- Delete button (Heroicon - Trash) -->
+        <button class="icon-btn delete-btn" (click)="deleteEvent(event.id)" title="Delete Event">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4h6v3" />
+          </svg>
+        </button>
+      </div>
+
+      <h3>{{ event.title }}</h3>
+      <p><strong>Date:</strong> {{ event.schedule | date: 'mediumDate' }}</p>
+      <p><strong>Location:</strong> {{ event.location }}</p>
+
+      <div class="card-actions" *ngIf="!authService.isRole('professional')">
+        <button (click)="checkStatus(event.id)" class="secondary-btn">Check Status</button>
+        <button (click)="viewDetails(event.id)" class="secondary-btn">View Details</button>
+        <button (click)="enroll(event.id)" class="primary-button">Enroll</button>
+        <div class="status-text" *ngIf="statusResults[event.id]">
+          {{ statusResults[event.id] }}
+        </div>
+      </div>
+    </div>
+  </div>
+
   <p *ngIf="!events.length && !errorMessage">No events available.</p>
 </div>

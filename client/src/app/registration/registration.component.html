@@ -1,32 +1,133 @@
-<div class="registration-container">
-  <h2>Register</h2>
-  <form [formGroup]="itemForm" (ngSubmit)="register()">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input id="username" type="text" formControlName="username" placeholder="Enter username" />
+<section class="register-shell abstract-bg">
+  <!-- Animated background (same family as login) -->
+  <div class="bg-abstract" aria-hidden="true">
+    <!-- ribbons -->
+    <svg class="shape ribbon ribbon-a" viewBox="0 0 1200 600" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="regA" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="var(--primary-color)" stop-opacity="0.9" />
+          <stop offset="100%" stop-color="var(--secondary-color)" stop-opacity="0.7" />
+        </linearGradient>
+      </defs>
+      <path d="M-50,420 C200,360 400,520 600,420 C820,320 980,400 1250,360"
+            fill="none" stroke="url(#regA)" stroke-width="48" stroke-linecap="round"/>
+    </svg>
+
+    <svg class="shape ribbon ribbon-b" viewBox="0 0 1200 600" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="regB" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--secondary-color)" stop-opacity="0.95" />
+          <stop offset="100%" stop-color="var(--primary-color)" stop-opacity="0.6" />
+        </linearGradient>
+      </defs>
+      <path d="M-100,240 C160,180 420,300 680,240 C900,190 1080,260 1300,220"
+            fill="none" stroke="url(#regB)" stroke-width="16" stroke-linecap="round"/>
+    </svg>
+
+    <!-- neon wave + stars -->
+    <svg class="neon-wave" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="regNeon" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0"   stop-color="var(--primary-color)"/>
+          <stop offset="0.6" stop-color="var(--secondary-color)"/>
+          <stop offset="1"   stop-color="var(--primary-color)"/>
+        </linearGradient>
+      </defs>
+      <path class="neon-path"
+            d="M0,70 C120,30 240,90 360,60 C480,30 600,100 720,55 C840,30 960,85 1080,50 C1140,35 1200,45 1200,45"
+            fill="none" stroke="url(#regNeon)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div class="stars stars-a"></div>
+    <div class="stars stars-b"></div>
+
+    <!-- polish -->
+    <div class="grid"></div>
+    <div class="grain"></div>
+  </div>
+
+  <div class="bg-anim">
+    <img
+      src="assets/finovent-register-anim.svg"
+      alt="Animated finance background"
+      class="bg-svg"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+    />
+  </div>
+  <!-- CONTENT (centered two-panel layout) -->
+  <div class="register-container">
+    <!-- Left: info/brand panel -->
+    <aside class="panel info-pane">
+      <div class="brand">
+        <i class="bi bi-stars"></i>
+        <span>Join Finovent</span>
+      </div>
+
+      <h1 class="headline">Create your account</h1>
+      <p class="subcopy">
+        One account gives you access to all roles and event tools. Choose your role now —
+      </p>
+
+      <ul class="bullets">
+        <li><i class="bi bi-shield-check"></i> Secure authentication</li>
+        <li><i class="bi bi-people"></i> Role-based dashboards</li>
+        <li><i class="bi bi-bar-chart-line"></i> Insights & analytics</li>
+      </ul>
+    </aside>
+
+    <!-- Right: registration form -->
+    <div class="panel form-pane">
+      <form class="reg-card reveal" [formGroup]="itemForm" (ngSubmit)="register()" novalidate>
+        <h2>Register</h2>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-icon">
+            <i class="bi bi-person-circle"></i>
+            <input id="username" type="text" formControlName="username" placeholder="Enter username" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <div class="input-icon">
+            <i class="bi bi-envelope-fill"></i>
+            <input id="email" type="email" formControlName="email" placeholder="Enter email" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-icon">
+            <i class="bi bi-lock-fill"></i>
+            <input id="password" type="password" formControlName="password" placeholder="Enter password" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Role</label>
+          <div class="input-icon select">
+            <i class="bi bi-person-badge"></i>
+            <select id="role" formControlName="role" required>
+              <option [ngValue]="null">Select Role</option>
+              <option value="participant">Participant</option>
+              <option value="professional">Professional</option>
+              <option value="institution">Institution</option>
+            </select>
+            <i class="bi bi-caret-down-fill caret"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="primary-btn submit-btn" [disabled]="itemForm.invalid">Register</button>
+
+        <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+        <p class="alt-link">
+          Already have an account? <a routerLink="/login">Login</a>
+        </p>
+      </form>
     </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input id="email" type="email" formControlName="email" placeholder="Enter email" />
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input id="password" type="password" formControlName="password" placeholder="Enter password" />
-    </div>
-    <div class="form-group">
-      <label for="role">Role</label>
-      <select id="role" formControlName="role">
-        <option [ngValue]="null">Select Role</option>
-        <option value="participant">Participant</option>
-        <option value="professional">Professional</option>
-        <option value="institution">Institution</option>
-      </select>
-    </div>
-    <button type="submit" class="primary-btn">Register</button>
-  </form>
-  <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
-  <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
-  <p class="login-link">
-    Already have an account? <a routerLink="/login">Login</a>
-  </p>
-</div>
+  </div>
+</section>

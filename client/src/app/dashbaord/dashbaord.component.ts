@@ -36,7 +36,6 @@ export class DashbaordComponent implements OnInit{
           this.totalParticipants += this.participants.length;
         });
         this.http.getEventDetails(this.events[i].id).subscribe((res) => {
-          console.log(res);
           this.totalFeedback += res.feedbacks.length;
         })
       }

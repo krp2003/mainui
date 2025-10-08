@@ -2,11 +2,11 @@
   <!-- HEADER -->
   <header class="dashboard-header">
     <h1 class="page-title">Dashboard Overview</h1>
-    <p class="subtitle">Welcome back, {{ authService.getUsername() || 'User' }}! Here's your latest summary.</p>
+    <p class="subtitle">Welcome back, {{ authService.getUsername || 'User' }}! Here's your latest summary.</p>
   </header>
 
   <!-- KPIs -->
-  <section class="stats-grid">
+  <section *ngIf="authService.getRole() === 'institution'" class="stats-grid">
     <div class="stat-card card reveal">
       <div class="icon-wrapper events">
         <i class="bi bi-calendar-event"></i>
@@ -54,27 +54,35 @@
     <section class="quick-actions">
       <h2 class="section-title">Quick Actions</h2>
       <div class="action-cards">
-        <div class="card action-card reveal">
+        <div *ngIf="authService.getRole() === 'institution'" class="card action-card reveal">
           <i class="action-icon bi bi-pencil-square"></i>
           <h4>Manage Events</h4>
-          <p>Create, edit, or update your seminars and workshops.</p>
-          <button class="btn-primary">Go to Events</button>
+          <p>Create & describe new seminars and workshops here.</p>
+          <button routerLink="/create-event" class="btn-primary">Create Events</button>
         </div>
 
-        <div *ngIf="authService.getRole() === 'professional'" class="card action-card reveal">
+        <div *ngIf="authService.getRole() === 'institution'" class="card action-card reveal">
           <i class="action-icon bi bi-cloud-upload-fill"></i>
-          <h4>Assigned Events</h4>
-          <p>Check sessions assigned to you and upload resources.</p>
-          <button routerLink="/add-resource" class="btn-outline">View & Upload</button>
+          <h4>Assign Professional</h4>
+          <p>Assign sessions to the professionals.</p>
+          <button routerLink="/assign-professional" class="btn-outline">Assign Events</button>
         </div>
 
-        <div *ngIf="authService.getRole() === 'participant'" class="card action-card reveal">
+      <div *ngIf="authService.getRole() === 'institution'" class="card action-card reveal">
+        <i class="action-icon bi bi-arrow-right-circle-fill"></i>
+        <h4>View All Events</h4>
+        <p>Browse all events and update the sessions or workshops.</p>
+        <button routerLink="/view-events" class="btn-primary">View Events</button>
+      </div>
+
+      <!-- <div class="card action-card reveal">
           <i class="action-icon bi bi-arrow-right-circle-fill"></i>
           <h4>Enroll Now</h4>
           <p>Browse available events and join upcoming sessions.</p>
           <button routerLink="/view-events" class="btn-primary">Explore Events</button>
         </div>
-      </div>
+      </div> -->
+    </div>
     </section>
 
     <!-- RIGHT -->

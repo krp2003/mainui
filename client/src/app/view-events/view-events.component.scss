@@ -1,7 +1,64 @@
-// Styles for the View Events page
+
+
+
+
+.top-right-icons {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  color: var(--text-color);
+}
+
+.icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+.update-btn:hover {
+  color: #22c55e; /* green */
+}
+
+.delete-btn:hover {
+  color: #ef4444; /* red */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .events-container {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 2rem;
   background-color: var(--surface-color);
@@ -11,73 +68,127 @@
 
 h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
   font-weight: 700;
   background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.events-table {
-  width: 100%;
-  border-collapse: collapse;
+.error-message {
+  color: #dc2626;
+  text-align: center;
   margin-bottom: 1rem;
 }
-.events-table thead {
-  background-color: var(--background-color);
+
+.event-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
-.events-table th,
-.events-table td {
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  text-align: left;
-  vertical-align: top;
+
+.event-card {
+  position: relative; /* needed for top-right icons */
+  background-color: #1e1e2f;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.events-table th {
-  font-weight: 600;
+
+.event-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.event-card p {
+  margin: 0.25rem 0;
   color: var(--text-color);
 }
 
-// .btn-set button{
-//   background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-// }
-/* Action buttons */
+.event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.top-right-icons {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 4px;
+  transition: transform 0.2s ease;
+  color: var(--text-color);
+}
+
+.icon-btn:hover {
+  transform: scale(1.15);
+}
+
+.update-btn:hover {
+  color: #22c55e; /* green */
+}
+
+.delete-btn:hover {
+  color: #ef4444; /* red */
+}
+
+.card-actions {
+  margin-top: 1rem;
+}
+
+.card-actions button {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .primary-button,
 .secondary-btn {
   padding: 0.4rem 0.8rem;
   border: none;
   border-radius: var(--radius);
-  margin-right: 0.25rem;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
+
 .primary-button {
   background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
   color: var(--text-color);
 }
+
 .primary-button:hover {
   opacity: 0.9;
   transform: translateY(-1px);
 }
+
 .secondary-btn {
+  background-color: transparent;
   color: var(--text-color);
+  border: 1px solid var(--border-color);
 }
+
 .secondary-btn:hover {
   background-color: #808488;
   transform: translateY(-1px);
 }
 
 .status-text {
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   font-size: 0.85rem;
   color: var(--text-secondary-color);
-}
-
-.error-message {
-  color: #dc2626;
-  text-align: center;
-  margin-bottom: 0.5rem;
 }

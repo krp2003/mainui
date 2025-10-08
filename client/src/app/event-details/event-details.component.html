@@ -1,99 +1,64 @@
-<!-- <div *ngIf="loading" class="text-center mt-4">
-  <p>Loading event details...</p>
-</div>
-
-<div *ngIf="!loading && eventData">
-  <h2>{{ eventData.event.name }}</h2>
-  <p><strong>Date:</strong> {{ eventData.event.schedule | date }}</p>
-  <p>{{ eventData.event.description }}</p>
-
-  <hr />
-
-  <h3>📚 Resources</h3>
-  <ul *ngIf="eventData.resources.length; else noResources">
-    <li *ngFor="let res of eventData.resources">
-       {{res.description}}
-    </li>
-  </ul>
-  <ng-template #noResources><p>No resources available for this event.</p></ng-template>
-
-  <hr />
-
-  <h3>💬 Feedbacks</h3>
-  <ul *ngIf="eventData.feedbacks.length; else noFeedbacks">
-    <li *ngFor="let fb of eventData.feedbacks" class="feedback-item">
-      <p>{{ fb.comment }}</p>
-      <small>By <strong>{{ fb.user?.name }}</strong> — ⭐ {{ fb.rating }}/5</small>
-    </li>
-  </ul>
-  <ng-template #noFeedbacks><p>No feedbacks yet for this event.</p></ng-template>
-</div> -->
-
-<div class="container mt-4" *ngIf="eventData">
+<div class="event-details-container" *ngIf="eventData">
   <!-- Event Header -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h3 class="card-title text-primary">{{ eventData.event.name }}</h3>
-      <p class="card-text mb-1"><strong>Date:</strong> {{ eventData.event.schedule | date }}</p>
-      <p class="card-text text-muted">{{ eventData.event.description }}</p>
+  <div class="event-header">
+    <h2>{{ eventData.event.name }}</h2>
+    <p><strong>Date:</strong> {{ eventData.event.schedule | date }}</p>
+    <p>{{ eventData.event.description }}</p>
+    <div class="professionals">
       <b>Professionals:</b>
-      <div *ngFor="let p of eventData.event.professionals">
-        <p>{{p.username}} | {{p.email}}</p>
+      <div *ngIf="eventData.event.professionals && eventData.event.professionals.length > 0; else noProfessional">
+      <div *ngFor="let p of eventData.event.professionals" >
+        <p>{{ p.username }} | {{ p.email }}</p>
       </div>
-      <p class="card-text">Professional <strong>{{eventData.event.professional}}</strong></p>
+      </div>
     </div>
+    <ng-template #noProfessional>
+      <p class="muted-text">No Professionals available for this event.</p>
+    </ng-template>
   </div>
 
   <!-- Resources Section -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-header bg-light">
-      <h5 class="mb-0">Resources</h5>
+  <div class="section-box">
+    <h3>Resources</h3>
+    <div *ngIf="eventData.resources && eventData.resources.length > 0; else noResources">
+      <ul>
+        <li *ngFor="let res of eventData.resources">
+          <i class="bi bi-link-45deg"></i>
+          <a href="{{ res.description }}" target="_blank">{{ res.type }}</a>
+        </li>
+      </ul>
     </div>
-    <div class="card-body">
-      <div *ngIf="eventData.resources && eventData.resources.length > 0; else noResources">
-        <ul class="list-group">
-          <li class="list-group-item" *ngFor="let res of eventData.resources">
-            <i class="bi bi-link-45deg text-primary me-2"></i>
-            <a href="{{res.description}}">{{res.type}}</a>
-          </li>
-        </ul>
-      </div>
-      <ng-template #noResources>
-        <p class="text-muted mb-0">No resources available for this event.</p>
-      </ng-template>
-    </div>
+    <ng-template #noResources>
+      <p class="muted-text">No resources available for this event.</p>
+    </ng-template>
   </div>
 
   <!-- Feedback Section -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-header bg-light">
-      <h5 class="mb-0">Feedback</h5>
-    </div>
-    <div class="card-body">
-      <div *ngIf="eventData.feedbacks && eventData.feedbacks.length > 0; else noFeedbacks">
-        <div class="feedback-item border-start ps-3 mb-3" *ngFor="let fb of eventData.feedbacks">
-          <p class="mb-1">{{ fb.comment }}</p>
-          <small class="text-muted">
-            By <strong>{{ fb.user?.username }}</strong> — ⭐ {{ fb.rating }}/5
-            <p>{{fb.content}}</p>
-          </small>
-        </div>
+  <div class="section-box">
+    <h3>Feedback</h3>
+    <div *ngIf="eventData.feedbacks && eventData.feedbacks.length > 0; else noFeedbacks">
+      <div class="feedback-item" *ngFor="let fb of eventData.feedbacks">
+        <p class="comment">{{ fb.comment }}</p>
+        <small class="muted-text">
+          By <strong>{{ fb.user?.username }}</strong> — ⭐ {{ fb.rating }}/5
+        </small>
       </div>
-      <ng-template #noFeedbacks>
-        <p class="text-muted mb-0">No feedback available for this event.</p>
-      </ng-template>
     </div>
+    <ng-template #noFeedbacks>
+      <p class="muted-text">No feedback available for this event.</p>
+    </ng-template>
+  </div>
+
+  <!-- Enrollments Button -->
+  <div class="enrollments-btn-container">
+    <input type="button" value="View Enrollments" (click)="viewEnrollments()">
   </div>
 </div>
 
-<input type="button" value="View Enrollments" (click)="viewEnrollments()">
-
-
-
 <!-- Loading State -->
-<div class="text-center mt-5" *ngIf="loading">
+<div class="loading-container" *ngIf="loading">
   <div class="spinner-border text-primary" role="status">
     <span class="visually-hidden">Loading...</span>
   </div>
-  <p class="text-muted mt-2">Fetching event details...</p>
+  <p class="muted-text mt-2">Fetching event details...</p>
 </div>

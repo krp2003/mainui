@@ -1,73 +1,289 @@
-// Styles for the Registration page
+:host { display:block; }
+:root { --app-header-h: 64px; } /* adjust if your header height differs */
 
-.registration-container {
-  max-width: 460px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: var(--surface-color);
+.register-shell {
+  --p: var(--primary-color, #4f46e5);
+  --p-rgb: var(--primary-rgb, 79, 70, 229);
+  --s: var(--secondary-color, #db2777);
+  --s-rgb: var(--secondary-rgb, 219, 39, 119);
+  --bg: var(--background-color, #0b1221);
+  --surface: var(--surface-color, #0f172a);
+  --text: var(--text-color, #e5e7eb);
+  --text-dim: var(--text-secondary-color, #9aa4b2);
+  --border: var(--border-color, #233044);
+  --radius: var(--radius, 16px);
+  --elev: var(--shadow, 0 12px 28px rgba(0,0,0,.45));
+
+  min-height: calc(100dvh - var(--app-header-h, 64px));
+  display: grid; place-items: center;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  padding: 1.5rem 1rem;
+}
+
+/* ---------- Animated Abstract Background (same family as login) ---------- */
+.bg-abstract { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.shape { position: absolute; will-change: transform, opacity; }
+.ribbon { width:140%; height:60%; left:-20%; opacity:.38; mix-blend-mode:screen;
+  filter: drop-shadow(0 10px 30px rgba(var(--p-rgb), .2)); }
+.ribbon-a { top:58%; transform-origin:20% 50%; animation: driftA 24s ease-in-out infinite; }
+.ribbon-b { top:20%;  transform-origin:80% 50%; animation: driftB 20s ease-in-out infinite; opacity:.48; }
+@keyframes driftA { 0%{transform:rotate(-2deg)} 50%{transform:rotate(2deg) translateY(-1.5%)} 100%{transform:rotate(-2deg)} }
+@keyframes driftB { 0%{transform:rotate(4deg)} 50%{transform:rotate(-1deg) translateY(1.2%) scale(1.02)} 100%{transform:rotate(4deg)} }
+
+.neon-wave { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); width:100%; height:120px;
+  opacity:.72; filter: drop-shadow(0 6px 20px rgba(var(--p-rgb), .25)) drop-shadow(0 0 18px rgba(var(--s-rgb), .20)); }
+.neon-path { stroke-dasharray: 1100; stroke-dashoffset: 1100; animation: waveDraw 14s ease-in-out infinite alternate; }
+@keyframes waveDraw { to { stroke-dashoffset: 0; } }
+
+.stars { position:absolute; inset:0; background-repeat:repeat; opacity:.22; mix-blend-mode:screen; }
+.stars-a { background-image:
+  radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,.9) 50%, transparent 51%),
+  radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,.7) 50%, transparent 51%),
+  radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,.8) 50%, transparent 51%);
+  background-size: 800px 800px; animation: starDriftA 80s linear infinite; }
+.stars-b { background-image:
+  radial-gradient(1px 1px at 20% 40%, rgba(255,255,255,.7) 50%, transparent 51%),
+  radial-gradient(1px 1px at 80% 70%, rgba(255,255,255,.6) 50%, transparent 51%),
+  radial-gradient(1px 1px at 40% 85%, rgba(255,255,255,.6) 50%, transparent 51%);
+  background-size: 1200px 1200px; animation: starDriftB 120s linear infinite; opacity:.16; }
+@keyframes starDriftA { to { background-position: 800px -800px; } }
+@keyframes starDriftB { to { background-position: -1200px 1200px; } }
+
+.grid { position:absolute; inset:0; opacity:.10;
+  background: repeating-linear-gradient(0deg,transparent 0 22px,rgba(255,255,255,.06) 23px),
+              repeating-linear-gradient(90deg,transparent 0 22px,rgba(255,255,255,.06) 23px); }
+.grain { position:absolute; inset:-50%;
+  background-image: url("data:image/svg+xml;utf8,\
+    <svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'>\
+      <filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/>\
+      <feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncA type='table' tableValues='0 0 .035 0'/>\
+      </feComponentTransfer></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity:.55; animation: grainShift 8s steps(2,end) infinite; transform:translateZ(0); }
+@keyframes grainShift { 0%,100%{transform:translate3d(0,0,0)} 50%{transform:translate3d(-1%,-1%,0)} }
+
+@media (prefers-reduced-motion: reduce){
+  .ribbon-a,.ribbon-b,.neon-path,.stars-a,.stars-b,.grain{ animation:none !important; }
+}
+
+/* ---------------- Centered two-panel layout ---------------- */
+.register-container{
+  position: relative; z-index: 1;
+  width: min(1120px, 100% - 2rem);
+  display: grid; gap: 1.2rem;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: stretch; justify-items: stretch;
+}
+
+@media (max-width: 992px){
+  .register-container { grid-template-columns: 1fr; width: min(760px, 100% - 2rem); }
+}
+
+/* Panels with breathing glow */
+.panel {
+  position: relative;
+  background: linear-gradient(0deg, rgba(255,255,255,.06), rgba(255,255,255,.06)), var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  text-align: center;
+  box-shadow: var(--elev);
+  backdrop-filter: blur(2px);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.panel::before {
+  content:""; position:absolute; inset:-2px; border-radius: inherit; pointer-events:none;
+  background:
+    radial-gradient(600px 300px at 20% -30%, rgba(var(--p-rgb), .18), transparent 60%),
+    radial-gradient(500px 260px at 110% 130%, rgba(var(--s-rgb), .16), transparent 60%);
+  mix-blend-mode: screen; opacity: .8; animation: panelGlow 10s ease-in-out infinite;
+}
+@keyframes panelGlow { 0%,100%{opacity:.75} 50%{opacity:1} }
+.panel:hover { transform: translateY(-3px); box-shadow: 0 18px 36px rgba(0,0,0,.48); }
+
+/* Info pane */
+.info-pane { padding: 1.6rem 1.4rem 1.4rem; display:flex; flex-direction:column; justify-content:center; }
+.brand { display:inline-flex; align-items:center; gap:.5rem; font-weight:800; letter-spacing:.3px;
+  i{ color: var(--p); }
+  span{ background: linear-gradient(90deg, var(--p), rgba(var(--p-rgb), .65));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; } }
+.headline { margin:.4rem 0 .35rem; font-weight:800; font-size: clamp(1.6rem, 2.4vw, 2rem); color:#f8fafc; }
+.subcopy  { margin:0 0 .9rem; color:var(--text-dim); line-height:1.65; }
+.bullets  { list-style:none; margin:0; padding:0; display:grid; gap:.55rem;
+  li{ display:flex; align-items:center; gap:.5rem; color:var(--text); } i{ color:var(--p); } }
+
+/* Form pane & card */
+.form-pane { display:flex; align-items:center; justify-content:center; padding:.8rem; }
+.reg-card {
+  width: 100%; max-width: 520px; padding: 1.4rem 1.2rem 1.2rem;
+}
+.reg-card h2 {
+  margin: 0 0 1rem; font-weight: 800; font-size: 1.45rem;
+  background: linear-gradient(90deg, var(--p), rgba(var(--p-rgb), .70));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
-h2 {
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Inputs/selects with icons */
+.form-group { margin-bottom: 1rem; }
+.form-group label { display:block; margin-bottom:.35rem; font-weight:600; color:var(--text); }
+.input-icon {
+  display:flex; align-items:center; gap:.55rem;
+  background: rgba(17,24,39,.70);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 6px);
+  padding: .6rem .75rem;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  i { color: rgba(226,232,240,.85); }
+  input, select {
+    flex:1; border:0; outline:0; background:transparent; color:var(--text); font-size:1rem;
+  }
+  select { appearance: none; padding-right: 1.6rem; }
+  .caret { margin-left: -1.2rem; pointer-events: none; opacity: .8; }
+  &:focus-within {
+    border-color: var(--p);
+    box-shadow: 0 0 0 3px rgba(var(--p-rgb), .35);
+    background: rgba(30,41,59,.88);
+  }
 }
 
-.form-group {
-  margin-bottom: 1rem;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
+/* Messages & alt link */
+.success-message { color:#16a34a; margin-top:.75rem; text-align:center; }
+.error-message   { color:#dc2626; margin-top:.75rem; text-align:center; }
+.alt-link { margin-top: 1rem; text-align: center; color: var(--text-dim);
+  a { color: var(--p); text-decoration: underline; } }
+
+/* Animated primary button */
+.submit-btn {
+  width:100%; margin-top:.4rem; padding:.8rem 1rem; border-radius: calc(var(--radius) - 6px);
+  font-weight:700; border:0; color:#fff;
+  background: linear-gradient(90deg, rgba(var(--p-rgb), .98), var(--s));
+  background-size: 200% 100%;
+  box-shadow: 0 10px 22px rgba(var(--p-rgb), .35);
+  animation: btnSheen 6s ease-in-out infinite;
+  transition: transform .1s ease, filter .15s ease;
 }
-.form-group label {
-  margin-bottom: 0.35rem;
-  font-weight: 500;
-  color: var(--text-secondary-color);
+@keyframes btnSheen { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+.submit-btn:hover { transform: translateY(-1px); filter: brightness(.97); }
+.submit-btn:disabled { opacity:.65; box-shadow:none; filter:grayscale(.15) brightness(.92); cursor:not-allowed; }
+
+/* Reveal motion */
+.reveal { opacity:0; transform: translateY(10px); animation: reveal .5s ease forwards; }
+@keyframes reveal { to { opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce){ .reveal, .submit-btn{ animation:none !important; } }
+
+/* --- STOP PAGE FROM MOVING (shared patch for login & register) --- */
+html, body { overflow-x: hidden; }
+
+/* pin background to viewport */
+.auth-shell .bg-abstract,
+.register-shell .bg-abstract {
+  position: fixed;
+  inset: 0;
+  z-index: 0;         /* background plane */
+  pointer-events: none;
 }
-.form-group input,
-.form-group select {
-  padding: 0.6rem 0.8rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  font-size: 1rem;
-  background-color: var(--background-color);
+
+/* pin all animated bg shapes to viewport as well */
+.auth-shell .shape, .auth-shell .neon-wave, .auth-shell .stars,
+.register-shell .shape, .register-shell .neon-wave, .register-shell .stars {
+  position: fixed;
+}
+
+/* keep the UI above background and isolate layout */
+.auth-container, .register-container {
+  position: relative;
+  z-index: 1;         /* content plane */
+  contain: layout paint;
+}
+
+/* calm the grain: no translate, just subtle flicker */
+.grain {
+  inset: 0;           /* was -50%: large canvases can cause edges to “wander” */
+  animation: grainFlicker 8s steps(3, end) infinite;
+  transform: none !important;
+}
+@keyframes grainFlicker {
+  0%, 100% { opacity: .42; }
+  50%      { opacity: .58; }
+}
+
+/* optional: slightly reduce background pop to avoid visual drift */
+.ribbon-a { animation-duration: 22s; }
+.ribbon-b { animation-duration: 18s; }
+.neon-wave { opacity: .68; }        /* tweak to .75 for more pop */
+
+/* --- Animated SVG as background (fixed) --- */
+.register-shell { position: relative; }
+
+.bg-anim {
+  position: fixed;     /* pin to viewport to prevent layout movement */
+  inset: 0;
+  z-index: 0;          /* behind content */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-anim .bg-svg {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);   /* perfect center */
+  width: 110vw;                        /* slight overdraw */
+  height: 110vh;
+  object-fit: cover;
+  opacity: .58;                        /* tune .45–.75 */
+  filter: saturate(115%) drop-shadow(0 8px 22px rgba(79,70,229,.25));
+}
+
+/* Keep your cards above the background */
+.register-container { position: relative; z-index: 1; }
+
+/* Ensure no tiny horizontal scrollbars with subpixel transforms */
+html, body { overflow-x: hidden; }
+
+/* Respect reduced-motion at page level (SVG already has it internally if you used my file) */
+@media (prefers-reduced-motion: reduce) {
+  .bg-anim .bg-svg { filter: none; opacity: .5; }
+}
+
+
+.ribbon-a, .ribbon-b { opacity: .25; }
+.neon-wave { opacity: .5; }
+.stars-a, .stars-b { opacity: .12; }
+
+/* Let the browser render form controls in dark when system is dark */
+:root { color-scheme: light dark; } /* supports both; UA chooses per system */
+
+/* Force dark scheme inside the auth/registration shells when device is dark */
+@media (prefers-color-scheme: dark) {
+  .register-shell select { color-scheme: dark; }
+}
+
+/* Select field styling (keeps semantics, hides native arrow) */
+.input-icon select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: rgba(17, 24, 39, 0.85);          /* same as inputs */
   color: var(--text-color);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.form-group input:focus,
-.form-group select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-  outline: none;
+  border: 0;                                         /* wrapper already has border */
+  padding-right: 1.6rem;                             /* space for custom caret */
 }
 
-.primary-btn {
-  margin-top: 0.5rem;
+/* Options / optgroup colors when the listbox is rendered by the UA */
+.input-icon select option,
+.input-icon select optgroup {
+  background-color: var(--surface-color);            /* dark surface */
+  color: var(--text-color);
 }
 
-.success-message {
-  color: #16a34a;
-  margin-top: 0.75rem;
-  text-align: center;
-}
-.error-message {
-  color: #dc2626;
-  margin-top: 0.75rem;
-  text-align: center;
+/* Hover/selected state inside the opened list */
+.input-icon select option:hover,
+.input-icon select option:checked {
+  background-color: rgba(var(--primary-rgb, 79,70,229), 0.25);
+  color: #fff;
 }
 
-.login-link {
-  margin-top: 1.2rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary-color);
-}
-.login-link a {
-  color: var(--primary-color);
-  text-decoration: underline;
-}
+/* Keep the custom caret visible in dark */
+.input-icon.select .caret { color: var(--text-secondary-color); }
+
+/* Defensive: avoid tiny horizontal scrollbars from subpixel painting */
+html, body { overflow-x: hidden; }

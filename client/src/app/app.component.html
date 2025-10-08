@@ -1,5 +1,5 @@
 <!-- <a routerLink="/dashboard">Dashboard</a> -->
-<nav class="navbar">
+<!-- <nav class="navbar">
     <a class="navbar-brand ms-3 fw-bold" routerLink="/">Finovent</a>
     <div class="nav-wrapper">
         
@@ -18,6 +18,47 @@
     <button *ngIf="!authService.getLoginStatus()" routerLink="/login" class="login-btn ms-3">Login</button>
     
     <button *ngIf="!authService.getLoginStatus()" routerLink="/registration" class="register ms-3">Register</button>
-</nav>
+</nav> -->
 
+<nav class="app-nav" role="navigation" aria-label="Primary">
+    <div class="nav-inner">
+      <!-- Brand -->
+      <a routerLink="/" class="brand">
+        <span class="logo-dot" aria-hidden="true"></span>
+        Finovent
+      </a>
+  
+      <!-- CSS-only toggle (no TS needed) -->
+      <input id="navToggle" type="checkbox" class="nav-toggle" aria-hidden="true" />
+      <label for="navToggle" class="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </label>
+  
+      <!-- Links -->
+      <div class="links">
+        <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Dashboard</a>
+        <a routerLink="/create-event" routerLinkActive="active">Create Event</a>
+        <a routerLink="/add-resource" routerLinkActive="active">Add Resource</a>
+        <a routerLink="/assign-professional" routerLinkActive="active">Assign Professional</a>
+        <a routerLink="/update-status" routerLinkActive="active">Update Status</a>
+        <a routerLink="/view-events" routerLinkActive="active">View Events</a>
+      </div>
+  
+      <!-- Auth actions -->
+      <div class="actions" *ngIf="authService.getLoginStatus(); else authBtns">
+        <button type="button" class="chip user-chip" title="Signed in">
+          <i class="bi bi-person-circle" aria-hidden="true"></i>
+          <span class="username">{{ authService.getUsername || 'User' }}</span>
+        </button>
+        <button type="button" class="btn-ghost logout" (click)="logout()">Logout</button>
+      </div>
+  
+      <ng-template #authBtns>
+        <div class="actions">
+          <a routerLink="/login" class="btn-ghost">Login</a>
+          <a routerLink="/registration" class="btn-primary">Register</a>
+        </div>
+      </ng-template>
+    </div>
+  </nav>
 <router-outlet></router-outlet>
